@@ -1,8 +1,14 @@
-class SegmentsClosestPoints {
-    constructor(seg1p0, seg1p1, seg2p1, seg2p2) {
-        var u = seg1p1.clone().sub(seg1p0);
+/**
+ * Finds the closest points on two 3D segments
+ * Segments are given as pairs of THREE.Vector3
+ * Members point1, point2 and dist will be set with the output
+ * Adepted from http://geomalgorithms.com/a07-_distance.html
+ */
+ class SegmentsClosestPoints {
+    constructor(seg1p1, seg1p2, seg2p1, seg2p2) {
+        var u = seg1p2.clone().sub(seg1p1);
         var v = seg2p2.clone().sub(seg2p1);
-        var w = seg1p0.clone().sub(seg2p1);
+        var w = seg1p1.clone().sub(seg2p1);
         var a = u.dot(u);         // always >= 0
         var b = u.dot(v);
         var c = v.dot(v);         // always >= 0
@@ -62,8 +68,10 @@ class SegmentsClosestPoints {
         // get closest points
         u.multiplyScalar(sc);
         v.multiplyScalar(tc);
-        this.point1 = u.add(seg1p0);
+        this.point1 = u.add(seg1p1);
         this.point2 = v.add(seg2p1);
         this.dist = this.point1.distanceTo(this.point2);
     }
 }
+
+if (typeof module !== 'undefined') module.exports.SegmentsClosestPoints = SegmentsClosestPoints;
