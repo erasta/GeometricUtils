@@ -11,4 +11,5 @@ QUnit.test("project point to mesh", function(assert) {
     var p = new ProjectToMesh(geom).projectPoint(vec(0, 1, 15));
     assert.deepEqual(p.face, 8);
     assert.deepEqual(p.point, vec(0, 1, 5));
+    assert.deepEqual(p.dist, 10);
 });

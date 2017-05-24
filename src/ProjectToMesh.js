@@ -3,6 +3,9 @@ class ProjectToMesh {
         this.geometry = geometry;
     }
 
+    /**
+    * Finds the closest point on the mesh to a given point
+    **/
     projectPoint(point) {
         this.tri = this.tri || new THREE.Triangle();
         this.candPoint = this.candPoint || new THREE.Vector3();
