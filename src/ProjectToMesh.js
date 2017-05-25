@@ -27,6 +27,43 @@ class ProjectToMesh {
         }
         return { face: closestFace, point: closest, dist: dist };
     }
+
+    projectSegment(point1, face1, point2, face2, optionalOutput) {
+        optionalOutput = optionalOutput || [];
+        if (face1 === face2) return optionalOutput;
+        let e = this.sharedEdgeBetweenFaces(face1, face2);
+        if (e) {
+            let closest = new SegmentsClosestPoints(this.geometry.vertices[e[0]], this.geometry.vertices[e[1]], point1, point2);
+            optionalOutput.push(closest.point1);
+        } else {
+            let mid = this.projectPoint(point1.clone().lerp(point2, 0.5));
+            this.projectSegment(point1, face1, mid.point, mid.face, optionalOutput);
+        }
+        return optionalOutput;
+    }
+
+    sharedEdgeBetweenFaces(faceIndex1, faceIndex2) {
+        const f = this.geometry.faces[faceIndex1];
+        const g = this.geometry.faces[faceIndex2];
+        let e = [];
+        if (f.a === g.a || f.a === g.b || f.a === g.c) e.push(f.a);
+        if (f.b === g.a || f.b === g.b || f.b === g.c) e.push(f.b);
+        if (f.c === g.a || f.c === g.b || f.c === g.c) e.push(f.c);
+        if (e.length !== 2) return undefined;
+        return e;
+    }
+
+    projectPolyline(poly) {
+        if (poly.length === 0) return [];
+        let last = this.projectPoint(poly[0]);
+        let pointsOnMesh = [last.point];
+        for (let i = 1; i < poly.length; ++i) {
+            let next = this.projectPoint(poly[i]);
+            this.projectSegment(last.point, last.face, next.point, next.face, pointsOnMesh);
+            pointsOnMesh.push(next.point);
+        }
+        return pointsOnMesh;
+    }
 }
 
 if (typeof module !== 'undefined') module.exports.ProjectToMesh = ProjectToMesh;
