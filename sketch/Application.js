@@ -1,15 +1,15 @@
 class Application {
     init() {
-        this.x1 = 3;
-        this.y1 = 4;
-        this.z1 = 15;
+        this.x1 = 2;
+        this.y1 = 15;
+        this.z1 = 5;
         this.x2 = 2;
-        this.y2 = 4;
+        this.y2 = -13;
         this.z2 = 15;
 
         this.initGui();
 
-        this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), new THREE.MeshStandardMaterial({ color: 'red', transparent: true, opacity: 0.3 }));
+        this.mesh = new THREE.Mesh(new THREE.SphereGeometry(10), new THREE.MeshStandardMaterial({ color: 'red', transparent: true, opacity: 0.3 }));
         this.sceneManager.scene.add(this.mesh);
         this.sceneManager.scene.add(new THREE.Mesh(this.mesh.geometry, new THREE.MeshBasicMaterial({ color: 'yellow', wireframe: true })));
 
