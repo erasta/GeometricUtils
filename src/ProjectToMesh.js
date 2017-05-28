@@ -4,8 +4,8 @@ class ProjectToMesh {
     }
 
     /**
-    * Finds the closest point on the mesh to a given point
-    **/
+     * Finds the closest point on the mesh to a given point
+     **/
     projectPoint(point) {
         this.tri = this.tri || new THREE.Triangle();
         this.candPoint = this.candPoint || new THREE.Vector3();
@@ -30,15 +30,20 @@ class ProjectToMesh {
 
     projectSegment(point1, face1, point2, face2, optionalOutput) {
         optionalOutput = optionalOutput || [];
-        if (face1 === face2) return optionalOutput;
-        let e = this.sharedEdgeBetweenFaces(face1, face2);
-        if (e) {
-            let closest = new SegmentsClosestPoints(this.geometry.vertices[e[0]], this.geometry.vertices[e[1]], point1, point2);
-            optionalOutput.push(closest.point1);
-        } else {
-            let mid = this.projectPoint(point1.clone().lerp(point2, 0.5));
-            this.projectSegment(point1, face1, mid.point, mid.face, optionalOutput);
-            this.projectSegment(mid.point, mid.face, point2, face2, optionalOutput);
+        const verts = this.geometry.vertices;
+        let subSegments = [{ point1, face1, point2, face2 }];
+        while (subSegments.length) {
+            const seg = subSegments.shift();
+            if (seg.face1 === seg.face2) return optionalOutput;
+            let e = this.sharedEdgeBetweenFaces(seg.face1, seg.face2);
+            if (e) {
+                const closest = new SegmentsClosestPoints(verts[e[0]], verts[e[1]], seg.point1, seg.point2);
+                optionalOutput.push(closest.point1);
+            } else {
+                const mid = this.projectPoint(point1.clone().lerp(point2, 0.5));
+                subSegments.unshift({ point1: mid.point, face1: mid.face, point2: point2, face2: face2 });
+                subSegments.unshift({ point1: point1, face1: face1, point2: mid.point, face2: mid.face });
+            }
         }
         return optionalOutput;
     }
