@@ -9,27 +9,31 @@ class Application {
 
         this.initGui();
 
-        var material = new THREE.MeshStandardMaterial({ color: 'red' });
-        this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), material);
+        this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), new THREE.MeshStandardMaterial({ color: 'red', transparent: true, opacity: 0.3 }));
         this.sceneManager.scene.add(this.mesh);
+        this.sceneManager.scene.add(new THREE.Mesh(this.mesh.geometry, new THREE.MeshBasicMaterial({ color: 'yellow', wireframe: true })));
 
         this.applyGuiChanges();
     }
 
+    addLine(poly, color) {
+        const out = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({color: color}));
+        out.geometry.vertices = poly;
+        this.sceneManager.scene.add(out);
+        return out;
+    }
+
     applyGuiChanges() {
-        this.sceneManager.scene.remove(this.line);
-        this.line = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({color: 'blue'}));
         const v1 = new THREE.Vector3(this.x1, this.y1, this.z1);
         const v2 = new THREE.Vector3(this.x2, this.y2, this.z2);
-        this.line.geometry.vertices.push(v1, v2);
-        this.sceneManager.scene.add(this.line);
 
-        var actual = new ProjectToMesh(this.mesh.geometry).projectPolyline(this.line.geometry.vertices);
-        console.log('*****');actual.forEach(a => console.log(a.toArray()));
+        this.sceneManager.scene.remove(this.line);
+        this.line = this.addLine([v1, v2], 'blue');
+
+        var actual = new ProjectToMesh(this.mesh.geometry).projectPolyline([v1, v2]);
         this.sceneManager.scene.remove(this.out);
-        this.out = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({color: 'green'}));
-        this.out.geometry.vertices = actual;
-        this.sceneManager.scene.add(this.out);
+        this.out = this.addLine(actual, 'green');
+        // console.log('*****');actual.forEach(a => console.log(a.toArray()));
     }
 
     initGui() {
