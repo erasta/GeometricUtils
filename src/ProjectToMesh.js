@@ -38,6 +38,7 @@ class ProjectToMesh {
         } else {
             let mid = this.projectPoint(point1.clone().lerp(point2, 0.5));
             this.projectSegment(point1, face1, mid.point, mid.face, optionalOutput);
+            this.projectSegment(mid.point, mid.face, point2, face2, optionalOutput);
         }
         return optionalOutput;
     }
