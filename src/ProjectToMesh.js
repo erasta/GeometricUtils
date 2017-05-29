@@ -33,7 +33,7 @@ class ProjectToMesh {
         const verts = this.geometry.vertices;
         let subSegments = [{ point1, face1, point2, face2 }];
         while (subSegments.length) {
-            const seg = subSegments.shift();
+            const seg = subSegments.pop();
             // console.log('seg', seg);
             if (seg.face1 === seg.face2) continue;
             let e = this.sharedEdgeBetweenFaces(seg.face1, seg.face2);
@@ -46,8 +46,8 @@ class ProjectToMesh {
                 // console.log(point1.toArray(), point2.toArray(), p);
                 const mid = this.projectPoint(p);
                 // console.log('mid', p.toArray().map(x => Math.round(x * 1000) / 1000), mid.face, mid.point.toArray().map(x => Math.round(x * 1000) / 1000));
-                subSegments.unshift({ point1: mid.point, face1: mid.face, point2: seg.point2, face2: seg.face2 });
-                subSegments.unshift({ point1: seg.point1, face1: seg.face1, point2: mid.point, face2: mid.face });
+                subSegments.push({ point1: mid.point, face1: mid.face, point2: seg.point2, face2: seg.face2 });
+                subSegments.push({ point1: seg.point1, face1: seg.face1, point2: mid.point, face2: mid.face });
             }
         }
         return optionalOutput;
