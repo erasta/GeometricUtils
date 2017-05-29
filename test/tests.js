@@ -29,10 +29,18 @@ QUnit.test("project line to plane", function(assert) {
     assert.deepEqual(actual, [vec(-1, 1, 0), vec(-1.5, -1.5, 0), vec(-2, -4, 0)]);
 });
 
-QUnit.test("project line to mesh", function(assert) {
+QUnit.test("project line to box", function(assert) {
     var geom = new THREE.BoxGeometry(10, 10, 10);
     var actual = new ProjectToMesh(geom).projectPolyline([vec(-1, -4, 15), vec(15, 3, -4)]);
     actual = actual.map(a => a.toArray().map(x => Math.round(x * 10000) / 10000));
     // console.log(actual.map(a => a.toArray()).join('], ['));
     assert.deepEqual(actual, [[-1,-4,5], [5,-1.76,5], [5,-0.5,0.5], [5,3,-4]]);
+});
+
+QUnit.test("project line to sphere", function(assert) {
+    var geom = new THREE.SphereGeometry(10);
+    var actual = new ProjectToMesh(geom).projectPolyline([vec(1.5, 1, 11), vec(1.3, -8, 7)]);
+    actual = actual.map(a => a.toArray().map(x => Math.round(x * 10000) / 10000));
+    // console.log(actual.join('], ['));
+    assert.deepEqual(actual, [[0.8706,0.5929,9.4805], [1.0136,0,9.5802], [1.061,-0.8663,9.3284], [1.2871,-5,8.1271], [1.0975,-6.1362,7.0694], [0.9417,-7.1351,6.1351]]);
 });
