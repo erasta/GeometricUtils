@@ -34,15 +34,20 @@ class ProjectToMesh {
         let subSegments = [{ point1, face1, point2, face2 }];
         while (subSegments.length) {
             const seg = subSegments.shift();
-            if (seg.face1 === seg.face2) return optionalOutput;
+            // console.log('seg', seg);
+            if (seg.face1 === seg.face2) continue;
             let e = this.sharedEdgeBetweenFaces(seg.face1, seg.face2);
             if (e) {
                 const closest = new SegmentsClosestPoints(verts[e[0]], verts[e[1]], seg.point1, seg.point2);
+                // console.log('closest', closest.point1.toArray());
                 optionalOutput.push(closest.point1);
             } else {
-                const mid = this.projectPoint(point1.clone().lerp(point2, 0.5));
-                subSegments.unshift({ point1: mid.point, face1: mid.face, point2: point2, face2: face2 });
-                subSegments.unshift({ point1: point1, face1: face1, point2: mid.point, face2: mid.face });
+                const p = seg.point1.clone().lerp(seg.point2, 0.5);
+                // console.log(point1.toArray(), point2.toArray(), p);
+                const mid = this.projectPoint(p);
+                // console.log('mid', p.toArray().map(x => Math.round(x * 1000) / 1000), mid.face, mid.point.toArray().map(x => Math.round(x * 1000) / 1000));
+                subSegments.unshift({ point1: mid.point, face1: mid.face, point2: seg.point2, face2: seg.face2 });
+                subSegments.unshift({ point1: seg.point1, face1: seg.face1, point2: mid.point, face2: mid.face });
             }
         }
         return optionalOutput;
