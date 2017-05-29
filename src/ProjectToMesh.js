@@ -72,6 +72,7 @@ class ProjectToMesh {
             let next = this.projectPoint(poly[i]);
             this.projectSegment(last.point, last.face, next.point, next.face, pointsOnMesh);
             pointsOnMesh.push(next.point);
+            last = next;
         }
         return pointsOnMesh;
     }
