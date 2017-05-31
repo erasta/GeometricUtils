@@ -52,3 +52,11 @@ QUnit.test("project polyline to box", function(assert) {
     // console.log(actual.join('], ['));
     assert.deepEqual(actual, [[-1,-4,5], [5,-1.76,5], [5,-0.5,0.5], [5,3,-4], [5,2.65,-5], [1.3077,-1.3077,-5], [-1,-4,-5]]);
 });
+
+QUnit.test("intersect box with plane", function(assert) {
+    var geom = new THREE.BoxGeometry(10, 10, 10);
+    var plane = new THREE.Plane();
+    var actual = new MeshIntersectPlane(geom, plane).mergeSegments();
+    actual = actual.map(a => a.map(b => b.toArray()));
+    assert.deepEqual(actual, [[ [0, -5, 5], [0, 0, 5], [0, 5, 5], [0, 5, 0], [0, 5, -5], [0, 0, -5], [0, -5, -5], [0, -5, 0], [0, -5, 5]]]);
+});
