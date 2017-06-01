@@ -28,42 +28,6 @@ class ProjectToMesh {
         return { face: closestFace, point: closest, dist: dist };
     }
 
-    projectSegment(point1, face1, point2, face2, optionalOutput) {
-        optionalOutput = optionalOutput || [];
-        const verts = this.geometry.vertices;
-        let subSegments = [{ point1, face1, point2, face2 }];
-        while (subSegments.length) {
-            const seg = subSegments.pop();
-            // console.log('seg', seg);
-            if (seg.face1 === seg.face2) continue;
-            let e = this.sharedEdgeBetweenFaces(seg.face1, seg.face2);
-            if (e) {
-                const closest = new SegmentsClosestPoints(verts[e[0]], verts[e[1]], seg.point1, seg.point2);
-                // console.log('closest', closest.point1.toArray());
-                optionalOutput.push(closest.point1);
-            } else {
-                const p = seg.point1.clone().lerp(seg.point2, 0.5);
-                // console.log(point1.toArray(), point2.toArray(), p);
-                const mid = this.projectPoint(p);
-                // console.log('mid', p.toArray().map(x => Math.round(x * 1000) / 1000), mid.face, mid.point.toArray().map(x => Math.round(x * 1000) / 1000));
-                subSegments.push({ point1: mid.point, face1: mid.face, point2: seg.point2, face2: seg.face2 });
-                subSegments.push({ point1: seg.point1, face1: seg.face1, point2: mid.point, face2: mid.face });
-            }
-        }
-        return optionalOutput;
-    }
-
-    sharedEdgeBetweenFaces(faceIndex1, faceIndex2) {
-        const f = this.geometry.faces[faceIndex1];
-        const g = this.geometry.faces[faceIndex2];
-        let e = [];
-        if (f.a === g.a || f.a === g.b || f.a === g.c) e.push(f.a);
-        if (f.b === g.a || f.b === g.b || f.b === g.c) e.push(f.b);
-        if (f.c === g.a || f.c === g.b || f.c === g.c) e.push(f.c);
-        if (e.length !== 2) return undefined;
-        return e;
-    }
-
     findPointOnPolyline(polyline, point) {
         this.line = this.line || new THREE.Line3();
         this.point = this.point || new THREE.Vector3();

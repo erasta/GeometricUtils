@@ -8,9 +8,7 @@ class MeshIntersectPlane {
         this.segments = [];
         for (let i = 0; i < this.geometry.faces.length; ++i) {
             const inter = this.intersectFace(i);
-            // debugger
             if (inter instanceof Array) {
-                if (inter[0].distanceToManhattan(inter[1]) < 1e-6) debugger
                 this.segments.push(inter);
             }
         }
