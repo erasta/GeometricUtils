@@ -26,11 +26,9 @@
 <script src="../src/MeshSlicer.js"></script>
 <script>
 const apps = ['Project', 'Slice'];
-if (window.location.search == '?Project' || window.location.search == '') {
-    new SceneManager(new AppProject());
-} else if (window.location.search == '?Slice') {
-    new SceneManager(new AppSlice());
-}
+const q = apps.indexOf(window.location.search.substr(1));
+if (q <= 0) new SceneManager(new AppProject());
+if (q == 1) new SceneManager(new AppSlice());
 </script>
 </body>
 </html>
