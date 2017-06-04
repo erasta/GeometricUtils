@@ -17,13 +17,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.1/dat.gui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
 <script src="./SceneManager.js"></script>
-<script src="./Application.js"></script>
+<script src="./AppProject.js"></script>
+<script src="./AppSlice.js"></script>
 <script src="../src/ProjectToMesh.js"></script>
 <script src="../src/SegmentsClosestPoints.js"></script>
 <script src="../src/PolylineToCurve.js"></script>
 <script src="../src/MeshIntersectPlane.js"></script>
+<script src="../src/MeshSlicer.js"></script>
 <script>
-new SceneManager(new Application());
+const apps = ['Project', 'Slice'];
+if (window.location.search == '?Project' || window.location.search == '') {
+    new SceneManager(new AppProject());
+} else if (window.location.search == '?Slice') {
+    new SceneManager(new AppSlice());
+}
 </script>
 </body>
 </html>

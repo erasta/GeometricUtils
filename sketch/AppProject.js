@@ -1,4 +1,4 @@
-class Application {
+class AppProject {
     init() {
         this.x1 = 2;
         this.y1 = 15;
@@ -21,7 +21,7 @@ class Application {
     }
 
     addLine(poly, color) {
-        const out = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({color: color}));
+        const out = new THREE.Line(new THREE.Geometry(), new THREE.LineBasicMaterial({ color: color }));
         out.geometry.vertices = poly;
         this.sceneManager.scene.add(out);
         return out;
@@ -44,6 +44,8 @@ class Application {
     initGui() {
         this.applyGuiChanges = this.applyGuiChanges.bind(this);
         this.gui = new dat.GUI({ autoPlace: true, width: 500 });
+        this.app = 0;
+        this.gui.add(this, 'app', apps).onChange(() => {window.location.href = window.location.origin + window.location.pathname + '?' + this.app});
         this.gui.add(this, 'x1').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
         this.gui.add(this, 'y1').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
         this.gui.add(this, 'z1').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
