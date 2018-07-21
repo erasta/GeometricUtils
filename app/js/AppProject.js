@@ -36,17 +36,25 @@ class AppProject {
         this.sphere.position.copy(this.points[this.currPoint]);
         this.sceneManager.scene.add(this.sphere);
 
-        this.x = this.points[this.currPoint].x
-        this.y = this.points[this.currPoint].y
-        this.z = this.points[this.currPoint].z
         // console.log('*****');actual.forEach(a => console.log(a.toArray()));
     }
-
+    
     newPoint() {
-        var e = new THREE.Euler(Math.random() * 0.6 - 0.3, Math.random() * 0.6 - 0.3, Math.random() * 0.6 - 0.3);
+        var e = new THREE.Euler(Math.random() * 1.6 - 0.8, Math.random() * 1.6 - 0.8, Math.random() * 1.6 - 0.8);
         this.points.push(this.points[this.points.length - 1].clone().applyEuler(e));
         this.currPoint = this.points.length - 1;
         this.currPointCtrl.max(this.points.length - 1);
+        this.setPoint();
+    }
+    
+    setPoint() {
+        this.x = this.points[this.currPoint].x
+        this.y = this.points[this.currPoint].y
+        this.z = this.points[this.currPoint].z
+        this.currPointCtrl.updateDisplay();
+        this.xCtrl.updateDisplay();
+        this.yCtrl.updateDisplay();
+        this.zCtrl.updateDisplay();
         this.applyGuiChanges();
     }
 
@@ -57,17 +65,11 @@ class AppProject {
 
     initGui() {
         this.applyGuiChanges = this.applyGuiChanges.bind(this);
-        this.setCurrCoords = this.setCurrCoords.bind(this);
         this.gui = new dat.GUI({ autoPlace: true, width: 500 });
         this.gui.add(this, 'newPoint');
-        this.currPointCtrl = this.gui.add(this, 'currPoint').min(0).max(2).step(1).onChange(this.applyGuiChanges);
-        this.gui.add(this, 'x').min(-15).max(15).step(0.01).onChange(this.setCurrCoords);
-        this.gui.add(this, 'y').min(-15).max(15).step(0.01).onChange(this.setCurrCoords);
-        this.gui.add(this, 'z').min(-15).max(15).step(0.01).onChange(this.setCurrCoords);
-        // this.gui.add(this, 'y2').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
-        // this.gui.add(this, 'z2').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
-        // this.gui.add(this, 'x3').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
-        // this.gui.add(this, 'y3').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
-        // this.gui.add(this, 'z3').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
+        this.currPointCtrl = this.gui.add(this, 'currPoint').min(0).max(2).step(1).onChange(this.setPoint.bind(this));
+        this.xCtrl = this.gui.add(this, 'x').min(-15).max(15).step(0.01).onChange(this.setCurrCoords.bind(this));
+        this.yCtrl = this.gui.add(this, 'y').min(-15).max(15).step(0.01).onChange(this.setCurrCoords.bind(this));
+        this.zCtrl = this.gui.add(this, 'z').min(-15).max(15).step(0.01).onChange(this.setCurrCoords.bind(this));
     }
 }
