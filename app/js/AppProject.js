@@ -12,6 +12,7 @@ class AppProject {
 
         this.initGui();
 
+        // this.mesh = new THREE.Mesh(new THREE.TorusGeometry(), new THREE.MeshStandardMaterial({ color: 'red', transparent: true, opacity: 0.3 }));
         this.mesh = new THREE.Mesh(new THREE.SphereGeometry(10), new THREE.MeshStandardMaterial({ color: 'red', transparent: true, opacity: 0.3 }));
         // this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), new THREE.MeshStandardMaterial({ color: 'red', transparent: true, opacity: 0.3 }));
         this.sceneManager.scene.add(this.mesh);
