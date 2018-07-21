@@ -44,8 +44,6 @@ class AppProject {
     initGui() {
         this.applyGuiChanges = this.applyGuiChanges.bind(this);
         this.gui = new dat.GUI({ autoPlace: true, width: 500 });
-        this.app = 'Project';
-        this.gui.add(this, 'app', apps).onChange(() => {window.location.href = window.location.origin + window.location.pathname + '?' + this.app});
         this.gui.add(this, 'x1').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
         this.gui.add(this, 'y1').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
         this.gui.add(this, 'z1').min(-15).max(15).step(0.01).onChange(this.applyGuiChanges);
