@@ -1,8 +1,7 @@
-# GeometricUtils
-Geometric utility functions
+# MeshLinesProject
+Project Lines on mesh
 
-sketch app:
-https://erasta.github.io/GeometricUtils/sketch/
+https://erasta.github.io/MeshLinesProject/
 
 tests using QUnit:
-https://erasta.github.io/GeometricUtils/test/
+https://erasta.github.io/MeshLinesProject/test/
